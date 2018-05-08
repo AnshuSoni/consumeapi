@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Loading MySQL Records on Drop Down Selection using PHP jQuery</title>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" type="text/css" />
+<link href="dropdownsearch/search.css" rel="stylesheet" />
+<style type="text/css">
+select{
+	
+	width:250px;
+	padding:10px;
+	border-radius:3px;
+}
+</style>
+<script src="jquery-1.11.2.min.js"></script>
+<script src="dropdownsearch/search.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{		
+
+	$("#getForms").select2();
+
+	$("#getForms").change(function()
+	{				
+		var form_id = $(this).find(":selected").val();
+		
+		if(form_id=="NA") 
+			$('#result_data').attr('hidden', true);
+		else
+			$('#result_data').attr('hidden', false);
+		
+	
+		var dataString = 'form_id='+ form_id;
+		
+		
+		$("#display").attr('hidden',true);
+		$("#showResult").html('<p>Content in table...</p>');
+				
+		$.ajax
+		({
+			url: 'fetch_forms.php',
+			data: dataString,
+			cache: false,
+			success: function(r)
+			{
+				$("#display").html(r);
+				
+				$("#display").slideDown();
+			} 
+		});
+	})
+
+	
+	$('#submit').click(function(e){
+		e.preventDefault();
+		
+	});	//not working
+	
+	
+});
+
+$(document).on('click', '.submitForm', function(e){
+    e.preventDefault();
+	alert('Load data using AJAX...');
+
+	var dataString = 'form_id='+ 9999;	//any constant for testing
+	
+	$.ajax
+		({
+			url: 'fetch_forms.php',
+			data: dataString,
+			cache: false,
+			success: function(r)
+			{
+				$("#showResult").html(r);
+
+			} 
+		});
+	
+});
+
+
+</script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://www.codingcage.com">COMTAX</a>
+        </div>
+<!--        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="http://www.codingcage.com/2016/04/load-mysql-records-on-drop-down.html" target="_blank">Tutorial Link</a></li>
+            <li><a href="http://www.codingcage.com/p/about.html" target="_blank">About</a></li>
+            <li><a href="http://www.codingcage.com/p/contact-me.html" target="_blank">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+-->	  
+    </nav>
+
+<div class="container">
+	
+    
+    	<div class="page-header">
+		<label for="moduleSelect">MODULE</label>
+
+        <select id="getForms">
+			<option value="NA" selected="selected">---Select---</option>
+			<option value="form_1">Application</option>
+			<option value="form_2">Alert</option>
+			<option value="form_3">Document</option>
+			<option value="form_3">Entity</option>
+			<option value="form_3">Ledgers</option>
+			<option value="form_3">Grievance</option>
+			<option value="form_3">Payment</option>
+			<option value="form_3">Returns</option>
+			<option value="form_3">Tax Payer</option>
+			<option value="form_3">Tax Consultant</option>
+			
+        </select>
+
+        </div>
+    
+    <div class="row" id="display">
+       <!-- Records will be displayed here -->
+    </div>
+    
+
+    <div class="panel panel-primary" id="result_data" hidden="hidden">
+      <div class="panel-heading">Panel to display result</div>
+      <div class="panel-body" id="showResult">Content in table...</div>
+    </div>	
+<!--	
+	<div class="row" id="result_data">
+		
+	</div>
+-->	
+
+</div>
+</body>
+</html>
