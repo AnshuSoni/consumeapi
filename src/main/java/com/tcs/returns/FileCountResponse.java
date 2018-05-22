@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
@@ -16,11 +17,12 @@ public class FileCountResponse {
   "date": "14-07-2016"
 }
  */
-	
-	private Integer file_num;
+
+	@JsonFormat(shape=Shape.NUMBER_INT)
+	private Integer num_files;
 	private String eod_closed;
 
-	@DateTimeFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(shape=Shape.STRING.STRING, pattern="dd-MM-yyyy")
 	private Date date;
 
 	
@@ -29,19 +31,19 @@ public class FileCountResponse {
 		// TODO Auto-generated constructor stub
 	}
 
-	public FileCountResponse(Integer file_num, String eod_closed, Date date) {
+	public FileCountResponse(Integer num_files, String eod_closed, Date date) {
 		super();
-		this.file_num = file_num;
+		this.num_files = num_files;
 		this.eod_closed = eod_closed;
 		this.date = date;
 	}
 
 	public Integer getFile_num() {
-		return file_num;
+		return num_files;
 	}
 
-	public void setFile_num(Integer file_num) {
-		this.file_num = file_num;
+	public void setFile_num(Integer num_files) {
+		this.num_files = num_files;
 	}
 
 	public String getEod_closed() {
@@ -63,7 +65,7 @@ public class FileCountResponse {
 
 	@Override
 	public String toString() {
-		return "FileCountResponse [file_num=" + file_num + ", eod_closed=" + eod_closed + ", date=" + date + "]";
+		return "FileCountResponse [num_files=" + num_files + ", eod_closed=" + eod_closed + ", date=" + date + "]";
 	}
 	
 }

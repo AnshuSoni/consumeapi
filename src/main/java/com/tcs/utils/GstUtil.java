@@ -52,8 +52,8 @@ public class GstUtil {
 	
 	
 	private static final String PUBLIC_KEY_PATH_CER = "F:/G2GData/Application/Certificates/GSTN_G2A_SANDBOX_UAT_public.cer";
-	public static final String PUBLIC_KEY_PATH_PEM = "E:\\Anshu\\workspace\\gst-restservice-consume\\src\\main\\resources\\"+"GSTN_G2A_SANDBOX_UAT_public.pem";
-	
+	public static final String PUBLIC_KEY_PATH_PEM = "E:\\ANSHU\\gst-restservice-consume\\gst-restservice-consume\\src\\main\\resources\\"+"GSTN_G2A_SANDBOX_UAT_public.pem";
+	//public static final String PUBLIC_KEY_PATH_PEM = "/opt/cybershield_programming/gst-restservice-consume/gst-restservice-consume/src/main/resources/"+"GSTN_G2A_SANDBOX_UAT_public.pem";
 	public String generateSecureKey() throws Exception{
 		KEYGEN = KeyGenerator.getInstance(AES_ALGORITHM);
 		

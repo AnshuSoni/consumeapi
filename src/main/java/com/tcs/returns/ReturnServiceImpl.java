@@ -1,27 +1,25 @@
 package com.tcs.returns;
 
-import java.util.Arrays;
-import java.util.Date;
-
-import javax.xml.ws.Response;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.tcs.apiresponse.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcs.apiresponse.GetResponse;
 import com.tcs.auth.datasource.ReturnDataSource;
 import com.tcs.config.HeaderConfig;
+import com.tcs.utils.GstUtil;
 
+@Service
 public class ReturnServiceImpl implements ReturnService{
 
 	private static final Logger log = LoggerFactory.getLogger(ReturnServiceImpl.class);
@@ -32,9 +30,14 @@ public class ReturnServiceImpl implements ReturnService{
 	HeaderConfig headerConfig;
 	
 	
-	private FileCountRequest prepareRequest(String action, String type, String state_cd, String date){
+	private FileCountRequest prepareRequest(String action, String type, String state_cd, String date) {
 		
-		FileCountRequest request = new FileCountRequest(action, type, state_cd, date);
+		FileCountRequest request = null;
+		try {
+			request = new FileCountRequest(action, type, state_cd, date);
+		} catch (ParseException e) {
+			log.debug("Date parse exception");
+		}
 		
 		return request;
 	}
@@ -49,7 +52,7 @@ public class ReturnServiceImpl implements ReturnService{
 		HttpEntity<FileCountRequest> entity = new HttpEntity<>(request, headers);
 		log.debug("Request Header For ReturnFileCount : "+entity.toString());
 		
-		HttpEntity<String> stringEntity = new HttpEntity<>(headers);
+		
 		String returnCountURL = dataSource.getFileCountUrl()+"?action="+dataSource.getAction()+"&type=R1"+"&state_cd="+dataSource.getStateCd()+"&date=21-08-2017";
 		log.debug(returnCountURL);
 		HttpEntity<FileCountResponse> response;
@@ -70,16 +73,65 @@ public class ReturnServiceImpl implements ReturnService{
 	
 	}
 
-	public String getFileCount(ReturnDataSource dataSource,String authToken,HttpHeaders header) {
-		String url = dataSource.getFileCountUrl()+"?action=FILECNT&type=R1&state_cd=20&date=21-08-2017";
+	public FileCountResponse getFileCount(ReturnDataSource dataSource,String authToken,HttpHeaders header, String appKey,String decodedSek,FileCountRequest fileCountRequest) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		String date = "";
+		date = sdf.format(fileCountRequest.getDate());
+		
+		
+		String url = dataSource.getFileCountUrl()+"?action="+fileCountRequest.getAction()+"&type="+fileCountRequest.getType()+ "&state_cd="+fileCountRequest.getState_cd()+"&date="+date;
 		
 		HttpEntity<String> entity = new HttpEntity<String>(header);
 		
+		FileCountResponse fileCountResponse = null;
+		
+		String result = "";
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class); 
+		ResponseEntity<GetResponse> response = restTemplate.exchange(url, HttpMethod.GET, entity,GetResponse.class); 
 		
-		log.debug(response.getBody());
+		if(response.getBody().getStatusCd().equals("1")) {
+			byte[] decryptedRek;
+			try {
+				/*
+				byte[] DECRYPTED_REK=gstutil.decrypt(REK, gstutil.decodeBase64StringTOByte(encoded_ek));
+				System.out.println("Decrypted SEK = "+DECRYPTED_REK);
+				*/
+				
+				decryptedRek = GstUtil.decrypt(response.getBody().getRek(),GstUtil.decodeBase64StringTOByte(decodedSek));
+				String genHmac = GstUtil.generateHmac(response.getBody().getData(), decryptedRek);
+				
+				log.debug("Generated Hmac : "+genHmac);
+				
+				if(genHmac.equalsIgnoreCase(response.getBody().getHmac())) {
+					byte[] data = GstUtil.decodeBase64StringTOByte(response.getBody().getData());
+					result =  new String(data);
+					log.debug("decoded data"+result);
+					
+					ObjectMapper objectMapper = new ObjectMapper();
+					
+					fileCountResponse = objectMapper.readValue(data, FileCountResponse.class);
+					
+					log.debug(fileCountResponse.toString());
+				
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
-		return response.getBody();
+		
+		log.debug(response.toString());
+		
+		return fileCountResponse;
+	}
+
+	@Override
+	public FileCountResponse getFileCount(ReturnDataSource dataSource, String authToken, HttpHeaders header) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

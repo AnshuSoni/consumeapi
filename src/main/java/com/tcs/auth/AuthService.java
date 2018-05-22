@@ -1,5 +1,7 @@
 package com.tcs.auth;
 
+import java.security.Security;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,11 +96,12 @@ public class AuthService {
 		setSEK(response.getBody().getSek());
 		
 		//decrypting SEK
+		log.debug("Crypto Policy : "+Security.getProperty("crypto.policy"));
 		
 		//byte[] decrypt_auth_sek=gstutil.decrypt("317HdU61h0JGs16fS1z86bjKSm1RP259orDJ3gVjUMh30grP0n24lhrEuVmlH3xl", (gstutil.decodeBase64StringTOByte(encodedAppkey)));
-		
-		byte[] decrypt_auth_sek =  gstutil.decrypt(SEK, (gstutil.decodeBase64StringTOByte(appKey)));
-		log.debug("SEK : "+gstutil.encodeBase64String(decrypt_auth_sek));
+//		
+//		byte[] decrypt_auth_sek =  gstutil.decrypt(SEK, gstutil.decodeBase64StringTOByte(appKey));
+//		log.debug("SEK : "+gstutil.encodeBase64String(decrypt_auth_sek));
 		
 		return response.getBody();
 	}

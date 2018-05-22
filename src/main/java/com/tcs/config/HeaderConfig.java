@@ -17,7 +17,7 @@ public class HeaderConfig {
 
 	private static final Logger log = LoggerFactory.getLogger(HeaderConfig.class);
 
-	public HttpHeaders getAuthenticatedHeaders(AuthDataSource authDataSource,String authToken,String encodedKey) {
+	public HttpHeaders getAuthenticatedHeaders(AuthDataSource authDataSource,String authToken) {
 		HttpHeaders header = new HttpHeaders();
 
 		header.setContentType(MediaType.APPLICATION_JSON);

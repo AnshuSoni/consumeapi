@@ -9,6 +9,7 @@
 .settings
 .springBeans
 .sts4-cache
+gstapi.properties
 
 ### IntelliJ IDEA ###
 .idea
