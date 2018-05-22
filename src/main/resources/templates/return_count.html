@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Get Return Count</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" href="../css/jquery-ui.min.css" th:href="@{/css/jquery-ui.min.css}"/>
+<script type="text/javascript" src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" src="../static/js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+<script>
+$(document).ready(){
+	$("#date").datepicker(
+			{dateFormat: "dd-MMM-yyyy"}
+			);
+}
+</script>
+</head>
+<body>
+<form th:action="@{/return-filecount}" th:object="${returnFileCountRequest}" method="POST">
+    <fieldset>
+        <legend>Return File Count</legend>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="return_type">Return Type</label>
+                        <select class="form-control" id="return_type" name="type">
+                            <option value="R1" selected>R1</option>
+                            <option value="R2">R2</option>
+                            <option value="R3">R3</option>
+                            <option value="R4">R4</option>
+                            <option value="R5">R5</option>
+                            <option value="R6">R6</option>
+                            <option value="R7">R7</option>
+                            <option value="R8">R8</option>
+                            <option value="R9">R9</option>
+                            <option value="R10">R10</option>
+                            <option value="R11">R11</option>
+                            <option value="R12">R12</option>
+                            <option value="R13">R13</option>
+                            <option value="R14">R14</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="text" class="form-control" id="date" name="date">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+     </fieldset>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<form th:fragment="form" th:action="@{/return-filecount}"
+	th:object="${filecnt}" method="POST"
+	class="form-horizontal" name="form">
+	<fieldset>
+		<legend th:text="${formTitle} ? ${formTitle}: 'GST Return File Count'"></legend>
+
+		<div class="row">
+			<div class="col-md-6 col-lg-6">
+				<div class="row">
+					<div class="col-md-12 col-lg-12">
+						<span>Return Type</span>
+					</div>
+					<div class="col-md-12 col-lg-12 v-space">
+						<select th:field="*{type}" class="form-control" id="return_type"
+							name="type">
+							<option value="NA">---Select---</option>
+							<option value="R1" selected>R1</option>
+							<option value="R2">R2</option>
+							<option value="R3">R3</option>
+							<option value="R4">R4</option>
+							<option value="R5">R5</option>
+							<option value="R6">R6</option>
+							<option value="R7">R7</option>
+							<option value="R8">R8</option>
+							<option value="R9">R9</option>
+							<option value="R10">R10</option>
+							<option value="R11">R11</option>
+							<option value="R12">R12</option>
+							<option value="R13">R13</option>
+							<option value="R14">R14</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-lg-6">
+				<div class="row">
+					<div class="col-md-12 col-lg-12">
+						<span>Date</span>
+					</div>
+					<div class="col-md-12 col-lg-12 v-space">
+						<input th:field="*{date}" type="text" class="form-control"
+							id="date" name="date">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Submit button-->
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<button  name="submit" id="submitForm"
+					class="btn btn-primary submitForm"
+					style="margin-bottom: 20px; margin-right: 8px;">Submit</button>
+				<button id="reset" type="reset" name="reset" class="btn btn-default"
+					style="margin-bottom: 20px; margin-left: 8px;">Reset</button>
+			</div>
+		</div>
+	</fieldset>
+</form>

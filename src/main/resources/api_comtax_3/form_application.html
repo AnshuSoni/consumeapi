@@ -1,0 +1,76 @@
+<form th:action="@{/return-filecount}" th:object="${returnFileCountRequest}" method="POST" class="form-horizontal">
+<fieldset>
+<legend>APPLICATION</legend>
+
+	<div class="row">
+		<div class="col-md-6 col-lg-6">
+			<div class="row">
+					<div class="col-md-12 col-lg-12">
+						<span>Return Type</span>
+					</div>	
+					<div class="col-md-12 col-lg-12 v-space">
+						<select class="form-control" id="return_type" name="type">
+							<option value="NA">---Select---</option>
+							<option value="R1">R1</option>
+							<option value="R2">R2</option>
+							<option value="R3">R3</option>
+							<option value="R4">R4</option>
+							<option value="R5">R5</option>
+							<option value="R6">R6</option>
+							<option value="R7">R7</option>
+							<option value="R8">R8</option>
+							<option value="R9">R9</option>
+							<option value="R10">R10</option>
+							<option value="R11">R11</option>
+							<option value="R12">R12</option>
+							<option value="R13">R13</option>
+							<option value="R14">R14</option>
+						</select>
+					</div>
+			</div>	
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<span>Date</span>
+				</div>
+				<div class="col-md-12 col-lg-12 v-space">
+					<input type="date" formate="dd/mm/yyyy" class="form-control" id="date" name="date">
+				</div>
+			</div>	
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-lg-6">
+			<div class="row" style="padding-bottom:10px;">
+					<div class="col-md-12 col-lg-12">
+						<span>Input-a</span>
+					</div>	
+					<div class="col-md-12 col-lg-12 v-space">
+						<input type="text" class="form-control" id="input_a" name="input_a">
+					</div>
+			</div>	
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<span>Input-b</span>
+				</div>
+				<div class="col-md-12 col-lg-12 v-space">
+					<input type="text" class="form-control" id="input_a" name="input_b">
+				</div>
+			</div>	
+		</div>
+	</div>	
+	
+	<!-- Submit button-->
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<button id="submit" name="submit" class="btn btn-primary submitForm" style="margin-bottom:20px;">Submit</button>
+			<button id="reset" type="reset" name="reset" class="btn btn-default" style="margin-bottom:20px;">Reset</button>
+		</div>
+	</div>
+
+</fieldset>
+</form>

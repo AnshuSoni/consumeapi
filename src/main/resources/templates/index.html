@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GST MIS</title>
+
+<!-- --- Style Sheets ------------------------------------------------------------- -->
+
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" href="../css/headerstyle.css" th:href="@{/css/headerstyle.css}">		
+<link rel="stylesheet" type="text/css" href="../css/mainstyle.css" th:href="@{/css/mainstyle.css}">		
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css" th:href="@{/css/jquery-ui.css}">
+
+<!-- --- JS Files ----------------------------------------------------------------- -->
+<script type="text/javascript" src="../static/js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+<script type="text/javascript" src="../js/jquery.autocomplete.min.js" th:src="@{/js/jquery.autocomplete.min.js}"></script>
+<script type="text/javascript" src="../js/home.js" th:src="@{/js/home.js}"></script>
+<script>
+$(document).on('click', '.submitForm', function(e){
+    e.preventDefault();
+    //console.log("loading ajax......");
+    var txt = $("input").val();
+    var action = $("form[name='form']").attr("action");
+    //var data = JSON.stringify( $("form[name='form']").serializeArray() );
+    var data = $("form[name='form']").serialize();
+    $.post(action, data, function(result){
+	        $("#showResult").html(result);
+	//	console.log(result);
+    });	
+});
+</script>
+</head>
+<body style="background:#dcdcdc;">
+<div class="header" style="padding:15px; height:80px;">
+<div class="logo"><img src="../images/tcs_logo.png" th:src="@{/images/tcs_logo.png}" style="height:60px;"></div>
+<div class="header-content">GST G2G UAT TESTING</div>
+</div>	
+<nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">HOME</a>
+        </div>
+    </nav>
+
+<div class="container" id="containerMain" style="background:#fff; margin-bottom:20px;">
+    
+      
+      <div id="searchfield">
+        <form><input type="text" name="currency" class="biginput" id="autocomplete" placeholder="Press 'F' to show all options"></form>
+      </div><!-- @end #searchfield -->
+	
+	<!-- load forms here -->
+    <div id="display">
+       <!-- Form will be displayed here -->
+    </div>
+    
+
+    <div class="panel panel-default" id="result_data">
+      <div class="panel-heading">Panel to display result</div>
+      <div class="panel-body" id="showResult">Content in table...</div>
+    </div>	
+
+
+</div>
+<hr style="padding-top:50px; border-color:#dcdcdc;"/>
+<footer class="footer">
+      <div class="container">
+        <span class="text-muted" style="text-align:center;">Copyright &copy; 2008 | <strong>TATA CONSULTANCY SERVICES</strong></span>
+      </div>
+</footer> 
+</body>
+</html>
