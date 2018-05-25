@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcs.apiresponse.ErrorResponse;
 import com.tcs.apiresponse.GetResponse;
 import com.tcs.auth.datasource.ReturnDataSource;
 import com.tcs.config.HeaderConfig;
+import com.tcs.utils.DataParser;
 import com.tcs.utils.GstUtil;
 
 @Service
@@ -78,54 +80,28 @@ public class ReturnServiceImpl implements ReturnService{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		String date = "";
 		date = sdf.format(fileCountRequest.getDate());
-		
+		DataParser<FileCountResponse> dataParser = new DataParser<>(FileCountResponse.class);
 		
 		String url = dataSource.getFileCountUrl()+"?action="+fileCountRequest.getAction()+"&type="+fileCountRequest.getType()+ "&state_cd="+fileCountRequest.getState_cd()+"&date="+date;
 		
 		HttpEntity<String> entity = new HttpEntity<String>(header);
 		
 		FileCountResponse fileCountResponse = null;
+		ResponseEntity<ErrorResponse> errResponse = null;
 		
-		String result = "";
 		RestTemplate restTemplate = new RestTemplate();
+
 		ResponseEntity<GetResponse> response = restTemplate.exchange(url, HttpMethod.GET, entity,GetResponse.class); 
 		
 		if(response.getBody().getStatusCd().equals("1")) {
-			byte[] decryptedRek;
-			try {
-				/*
-				byte[] DECRYPTED_REK=gstutil.decrypt(REK, gstutil.decodeBase64StringTOByte(encoded_ek));
-				System.out.println("Decrypted SEK = "+DECRYPTED_REK);
-				*/
-				
-				decryptedRek = GstUtil.decrypt(response.getBody().getRek(),GstUtil.decodeBase64StringTOByte(decodedSek));
-				String genHmac = GstUtil.generateHmac(response.getBody().getData(), decryptedRek);
-				
-				log.debug("Generated Hmac : "+genHmac);
-				
-				if(genHmac.equalsIgnoreCase(response.getBody().getHmac())) {
-					byte[] data = GstUtil.decodeBase64StringTOByte(response.getBody().getData());
-					result =  new String(data);
-					log.debug("decoded data"+result);
-					
-					ObjectMapper objectMapper = new ObjectMapper();
-					
-					fileCountResponse = objectMapper.readValue(data, FileCountResponse.class);
-					
-					log.debug(fileCountResponse.toString());
-				
-				}
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fileCountResponse=	dataParser.parseData(decodedSek, response.getBody());
 			
+		}else{
+			 errResponse = restTemplate.exchange(url, HttpMethod.GET, entity,ErrorResponse.class);
+			 log.debug(errResponse.toString());
 		}
 		
-		
 		log.debug(response.toString());
-		
 		return fileCountResponse;
 	}
 
